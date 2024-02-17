@@ -173,10 +173,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #ifdef AUDIO_ENABLE
 float plover_song[][2]    = SONG(PLOVER_SOUND);
 float plover_gb_song[][2] = SONG(PLOVER_GOODBYE_SOUND);
+float minor_song[][2] = SONG(MINOR_SOUND);
+float major_song[][2] = SONG(MAJOR_SOUND);
+float chrom_song[][2] = SONG(CHROMATIC_SOUND);
 #endif
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+    layer_state_t current_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+
+    switch (get_highest_layer(current_state)) {
+        case _LOWER:
+#ifdef AUDIO_ENABLE
+            stop_all_notes();
+            PLAY_SONG(minor_song);
+#endif
+            break;
+
+        case _RAISE:
+#ifdef AUDIO_ENABLE
+            stop_all_notes();
+            PLAY_SONG(major_song);
+#endif
+            break;
+
+        case _ADJUST:
+#ifdef AUDIO_ENABLE
+            stop_all_notes();
+            PLAY_SONG(chrom_song);
+#endif
+            break;
+
+        default:
+            break;
+    }
+
+    return current_state;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
