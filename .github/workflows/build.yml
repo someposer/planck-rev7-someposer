@@ -1,0 +1,18 @@
+on: [push, pull_request, workflow_dispatch]
+
+name: Build Firmware
+
+jobs:
+  build-qmk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: d3adb5/build-qmk-fw@v1
+        with:
+          keyboard: planck/rev7
+          keymap: default
+      - uses: actions/upload-artifact@v4
+        with:
+          name: built-images
+          path: qmk-output
