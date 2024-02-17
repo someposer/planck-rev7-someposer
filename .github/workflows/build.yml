@@ -9,7 +9,7 @@ jobs:
     steps:
       shell: bash
       - uses: actions/checkout@v4
-      - uses: d3adb5/build-qmk-fw@v1
+      - uses: someposer/build-qmk-fw@v1
         with:
           keyboard: planck/rev7
           keymap: someposer
