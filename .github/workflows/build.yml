@@ -17,3 +17,4 @@ jobs:
         with:
           name: built-images
           path: qmk-output
+          if-no-files-found: error
