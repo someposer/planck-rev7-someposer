@@ -31,16 +31,6 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_MEH_HYPE] = ACTION_TAP_DANCE_DOUBLE(KC_MEH, KC_HYPR),
 };
 
-// Per key tapping term
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case TD(TD_MEH_HYPE):
-            return 300;
-        default:
-            return TAPPING_TERM;
-    }
-}
-
 #define MEHHYPE TD(TD_MEH_HYPE)
 
 // Define Layer keys
