@@ -28,7 +28,7 @@ enum {
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Mod, twice for Hype
-    [TD_MEH_HYPE] = ACTION_TAP_DANCE_DOUBLE(KC_MEH, KC_HYPE),
+    [TD_MEH_HYPE] = ACTION_TAP_DANCE_DOUBLE(KC_MEH, KC_HYPR),
 };
 
 // Per key tapping term
