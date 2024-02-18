@@ -288,7 +288,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case DB_TOGG:
 #ifdef COMMIT_SHA
-            dprintf("Commit: %s", STR(COMMIT_SHA));
+            if (!debug_enable && record->event.pressed) {
+                printf("Commit: %s\n", STR(COMMIT_SHA));
+            }
 #endif
             return true;
             break;

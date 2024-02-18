@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: echo "GITHUB_SHA_SHORT=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
-      - run: echo OPT_DEFS += -DCOMMIT_SHA=$GITHUB_SHA >> planck/rev7/keymaps/someposer/rules.mk
+      - run: echo OPT_DEFS += -DCOMMIT_SHA=$GITHUB_SHA_SHORT >> planck/rev7/keymaps/someposer/rules.mk
       - uses: d3adb5/build-qmk-fw@v1
         with:
           keyboard: planck/rev7
