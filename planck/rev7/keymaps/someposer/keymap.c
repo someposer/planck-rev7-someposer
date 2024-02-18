@@ -16,9 +16,16 @@
 
 #include QMK_KEYBOARD_H
 
+// Define custom keycodes & Layers
 enum planck_layers { _QWERTY, _COLEMAK, _DVORAK, _LOWER, _RAISE, _PLOVER, _ADJUST };
-
 enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EXT_PLV, DND };
+
+// Define Momentary Layer keys
+#define LOWER MO(_LOWER)
+#define RAISE MO(_RAISE)
+
+// Define convenience keycodes
+#define EXPO S(KC_UP)
 
 // Tap Dance declarations
 enum {
@@ -43,9 +50,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 };
 
 
-// Define Momentary Layer keys
-#define LOWER MO(_LOWER)
-#define RAISE MO(_RAISE)
+
 
 /* clang-format off */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -135,7 +140,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_RAISE] = LAYOUT_planck_grid(
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
-    KC_DEL,  KC_BRID, KC_BRIU, XXXXXXX, DND,     KC_MUTE, XXXXXXX, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
+    KC_DEL,  KC_BRID, KC_BRIU, EXPO,    DND,     KC_MUTE, XXXXXXX, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
