@@ -8,13 +8,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: someposer/build-qmk-fw@v1
+      - uses: benjlevesque/short-sha@v3.0
+      - uses: d3adb5/build-qmk-fw@v1
         with:
           keyboard: planck/rev7
           keymap: someposer
           local-keymap-path: planck/rev7/keymaps/someposer
       - uses: actions/upload-artifact@v4
         with:
-          name: built-images
+          name: built-images-${{ env.SHA }}
           path: qmk-output
           if-no-files-found: error
