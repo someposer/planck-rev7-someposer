@@ -42,3 +42,6 @@
    - etc.
 */
 // #define MIDI_ADVANCED
+
+// Enable Caps Word by double tapping Left Shift
+#define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
