@@ -25,7 +25,7 @@ enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EX
 #define RAISE MO(_RAISE)
 
 // Define convenience keycodes
-#define EXPO S(KC_UP)
+#define EXPO LCTL(KC_UP)
 
 // Tap Dance declarations
 enum {
