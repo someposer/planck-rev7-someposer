@@ -16,6 +16,9 @@
 
 #include QMK_KEYBOARD_H
 
+#define XSTR(x) #x
+#define STR(x) XSTR(x)
+
 // Define custom keycodes & Layers
 enum planck_layers { _QWERTY, _COLEMAK, _DVORAK, _LOWER, _RAISE, _PLOVER, _ADJUST };
 enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EXT_PLV, DND };
@@ -285,6 +288,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case DND:
             host_system_send(record->event.pressed ? 0x9B : 0);
             return false;
+            break;
+        case DB_TOGG:
+#ifdef COMMIT_SHA
+            dprintf("Commit: %s", STR(COMMIT_SHA));
+#endif
+            return true;
+            break;
+        default:
             break;
     }
     return true;
