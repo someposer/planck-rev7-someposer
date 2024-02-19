@@ -25,12 +25,12 @@ enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EX
 #define RAISE MO(_RAISE)
 
 // Define convenience keycodes
-#define EXPO LCTL(KC_UP)            // macOS Expose
-#define LOCK LCTL(LCMD(Q))          // MacOS Lock Screen
-#define SCRNF LSFT(LCMD(N3))        // MacOS Full Screenshot
-#define SCRNP LSFT(LCMD(N4))        // MacOS Partial Screenshot
-#define SCRNFC LCTL(LSFT(LCMD(N3))) // MacOS Full Screenshot to Clipboard
-#define SCRNPC LCTL(LSFT(LCMD(N4))) // MacOS Partial Screenshot to Clipboard
+#define EXPO LCTL(KC_UP)              // macOS Expose
+#define LOCK LCTL(LCMD(Q))            // MacOS Lock Screen
+#define SCRNF LSFT(LCMD(KC_3))        // MacOS Full Screenshot
+#define SCRNP LSFT(LCMD(KC_4))        // MacOS Partial Screenshot
+#define SCRNFC LCTL(LSFT(LCMD(KC_3))) // MacOS Full Screenshot to Clipboard
+#define SCRNPC LCTL(LSFT(LCMD(KC_4))) // MacOS Partial Screenshot to Clipboard
 
 // Tap Dance declarations
 enum {
