@@ -39,17 +39,17 @@ enum {
 
 // Tap Dance definitions
 void meh_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
+    if (state->count == 1 && state->pressed) {
         register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
-    } else if (state->count == 2) {
+    } else if (state->count == 2 && state->pressed) {
         register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
     }
 }
 
 void meh_reset(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
+    if (state->count == 1 && state->pressed) {
         unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
-    } else if (state->count == 2) {
+    } else if (state->count == 2 && state->pressed) {
         unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
     }
 }
