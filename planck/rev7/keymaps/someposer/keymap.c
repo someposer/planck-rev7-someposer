@@ -43,7 +43,8 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_MEH_HYPE] = ACTION_TAP_DANCE_DOUBLE(KC_MEH, KC_HYPR),
 };
 
-#define MEHHYPE TD(TD_MEH_HYPE)
+// TODO: Replace MEHHYPE with a Tap Dance version
+#define MEHHYPE KC_MEH
 
 // Define Key Overrides
 // const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
