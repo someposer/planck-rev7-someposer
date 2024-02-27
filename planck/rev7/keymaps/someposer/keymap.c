@@ -38,13 +38,28 @@ enum {
 };
 
 // Tap Dance definitions
+void meh_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
+    } else if (state->count == 2) {
+        register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+    }
+}
+
+void meh_reset(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
+    } else if (state->count == 2) {
+        unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+    }
+}
+
 tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Meh, twice for Hyper
-    [TD_MEH_HYPE] = ACTION_TAP_DANCE_DOUBLE(KC_MEH, KC_HYPR),
+    // Tap/hold once for Meh, twice for Hyper
+    [TD_MEH_HYPE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, meh_finished, meh_reset),
 };
 
-// TODO: Replace MEHHYPE with a Tap Dance version
-#define MEHHYPE KC_MEH
+#define MEHHYPE TD(TD_MEH_HYPE)
 
 // Define Key Overrides
 // const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
