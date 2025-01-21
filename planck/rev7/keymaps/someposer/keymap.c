@@ -38,20 +38,28 @@ enum {
 };
 
 // Tap Dance definitions
+static int meh_count=0;
 void meh_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1 && state->pressed) {
+    if (state->interrupted || !state->pressed) {
+        return;
+    }
+    
+    if (state->count == 1) {
+        meh_count=1;
         register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
-    } else if (state->count == 2 && state->pressed) {
+    } else if (state->count == 2) {
+        meh_count=2;
         register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
     }
 }
 
 void meh_reset(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1 && state->pressed) {
+    if (meh_count == 1) {
         unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
-    } else if (state->count == 2 && state->pressed) {
+    } else if (meh_count == 2) {
         unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
     }
+    meh_count=0;
 }
 
 tap_dance_action_t tap_dance_actions[] = {
