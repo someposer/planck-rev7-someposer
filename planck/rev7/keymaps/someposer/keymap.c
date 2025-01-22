@@ -37,29 +37,70 @@ enum {
     TD_MEH_HYPE,
 };
 
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_TAP,
+    TD_DOUBLE_HOLD,
+    TD_DOUBLE_SINGLE_TAP, // Send two single taps
+    TD_TRIPLE_TAP,
+    TD_TRIPLE_HOLD
+} td_state_t;
+
 // Tap Dance definitions
-static int meh_count=0;
-void meh_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->interrupted || !state->pressed) {
-        return;
-    }
-    
+static td_state_t meh_state = TD_NONE;
+
+td_state_t cur_dance(tap_dance_state_t *state) {
     if (state->count == 1) {
-        meh_count=1;
-        register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
+        if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
+        // Key has not been interrupted, but the key is still held. Means you want to send a 'HOLD'.
+        else return TD_SINGLE_HOLD;
     } else if (state->count == 2) {
-        meh_count=2;
-        register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+        // TD_DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
+        // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
+        // keystrokes of the key, and not the 'double tap' action/macro.
+        if (state->interrupted) return TD_DOUBLE_SINGLE_TAP;
+        else if (state->pressed) return TD_DOUBLE_HOLD;
+        else return TD_DOUBLE_TAP;
+    }
+
+    // Assumes no one is trying to type the same letter three times (at least not quickly).
+    // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+    // an exception here to return a 'TD_TRIPLE_SINGLE_TAP', and define that enum just like 'TD_DOUBLE_SINGLE_TAP'
+    if (state->count == 3) {
+        if (state->interrupted || !state->pressed) return TD_TRIPLE_TAP;
+        else return TD_TRIPLE_HOLD;
+    } else return TD_UNKNOWN;
+}
+
+void meh_finished(tap_dance_state_t *state, void *user_data) {
+    meh_state = cur_dance(state);
+    switch (meh_state) {
+        case TD_SINGLE_HOLD: 
+            register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT); 
+            break;
+        case TD_DOUBLE_HOLD:
+            register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+            break;
+        default:
+            break;
     }
 }
 
 void meh_reset(tap_dance_state_t *state, void *user_data) {
-    if (meh_count == 1) {
-        unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
-    } else if (meh_count == 2) {
-        unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+    switch (meh_state) {
+        case TD_SINGLE_HOLD: 
+            unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT); 
+            break;
+        case TD_DOUBLE_HOLD:
+            unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+            break;
+        default:
+            break;
     }
-    meh_count=0;
+    meh_state = TD_NONE;
 }
 
 tap_dance_action_t tap_dance_actions[] = {
