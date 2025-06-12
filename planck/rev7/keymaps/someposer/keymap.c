@@ -18,7 +18,7 @@
 
 // Define custom keycodes & Layers
 enum planck_layers { _QWERTY, _COLEMAK, _DVORAK, _LOWER, _RAISE, _PLOVER, _ADJUST };
-enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EXT_PLV, DND };
+enum custom_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EXT_PLV, DND };
 
 // Define Momentary Layer keys
 #define LOWER MO(_LOWER)
@@ -26,11 +26,11 @@ enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EX
 
 // Define convenience keycodes
 #define EXPO LCTL(KC_UP)              // macOS Expose
-#define LOCK LCTL(LCMD(Q))            // MacOS Lock Screen
-#define SCRNF LSFT(LCMD(KC_3))        // MacOS Full Screenshot
-#define SCRNP LSFT(LCMD(KC_4))        // MacOS Partial Screenshot
-#define SCRNFC LCTL(LSFT(LCMD(KC_3))) // MacOS Full Screenshot to Clipboard
-#define SCRNPC LCTL(LSFT(LCMD(KC_4))) // MacOS Partial Screenshot to Clipboard
+#define LOCK LCTL(LCMD(Q))            // macOS Lock Screen
+#define SCRNF LSFT(LCMD(KC_3))        // macOS Full Screenshot
+#define SCRNP LSFT(LCMD(KC_4))        // macOS Partial Screenshot
+#define SCRNFC LCTL(LSFT(LCMD(KC_3))) // macOS Full Screenshot to Clipboard
+#define SCRNPC LCTL(LSFT(LCMD(KC_4))) // macOS Partial Screenshot to Clipboard
 
 // Tap Dance declarations
 enum {
@@ -236,7 +236,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Adjust (Lower + Raise)
  *                      v------------------------RGB CONTROL--------------------v
  * ,-----------------------------------------------------------------------------------.
- * |      | Boot |Debug | RGB  |RGBMOD| HUE+ | HUE- | SAT+ | SAT- |BRGTH+|BRGTH-|  Del |
+ * |Reboot| Boot |Debug | RGB  |RGBMOD| HUE+ | HUE- | SAT+ | SAT- |BRGTH+|BRGTH-|  Del |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |EE Clr|MUSmod|Aud on|Audoff|AGnorm|AGswap|Qwerty|Colemk|Dvorak|Plover|      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -246,7 +246,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_grid(
-    XXXXXXX, QK_BOOT, DB_TOGG, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_DEL ,
+    QK_RBT , QK_BOOT, DB_TOGG, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_DEL ,
     XXXXXXX, EE_CLR,  MU_NEXT, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  PLOVER,  XXXXXXX,
     _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, SCRNPC,
     _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
