@@ -108,13 +108,31 @@ void meh_reset(tap_dance_state_t *state, void *user_data) {
     meh_state = TD_NONE;
 }
 
+static td_state_t q_state = TD_NONE;
+void q_dance_finished(tap_dance_state_t *state, void *user_data) {
+    q_state = cur_dance(state);
+    if (get_mods() == MOD_MASK_GUI) {
+        if (q_state == TD_DOUBLE_HOLD) {
+            register_code(KC_Q);
+        }
+    } else {
+        register_code(KC_Q);
+    }
+}
+
+void q_dance_reset(tap_dance_state_t *state, void *user_data) {
+    unregister_code(KC_Q);
+}
+
 tap_dance_action_t tap_dance_actions[] = {
     // Tap/hold once for Meh, twice for Hyper
     [TD_MEH_HYPE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, meh_finished, meh_reset),
+    [TD_CMD_Q] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, q_dance_finished, q_dance_reset),
 };
 
 #define CTL_ESC LCTL_T(KC_ESC)
 #define MEHHYPE TD(TD_MEH_HYPE)
+#define TD_Q TD(TD_CMD_Q)
 
 // Define Key Overrides
 // const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
@@ -142,7 +160,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
+    KC_TAB,  TD_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     CTL_ESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT ,
     MEHHYPE, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_RSFT, KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
