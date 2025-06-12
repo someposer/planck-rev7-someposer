@@ -336,6 +336,7 @@ layer_state_t layer_state_set_user(layer_state_t state)
 
 // Variables for Q double-tap
 #define DOUBLE_TAP_Q 250
+#define MODS_GUI ((get_mods() | get_oneshot_mods()) & MOD_MASK_GUI)
 static uint16_t q_tap_timer = 0;
 static uint8_t q_tap_count = 0;
 
