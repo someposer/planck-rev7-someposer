@@ -350,13 +350,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case KC_Q:
         if (record->event.pressed)
         {
-            uint8_t mod_state = get_mods();
-            dprintf("Q: ");
-            for (int i=7; i>=0; i--) {
-                dprintf("%d", (mod_state >> i) & 1);
+            if (debug_enable) {
+                uint8_t mod_state = get_mods();
+                dprintf("Q: ");
+                for (int i=7; i>=0; i--) {
+                    dprintf("%d", (mod_state >> i) & 1);
+                }
+                dprintf("/n");
             }
-            dprintf("/n");
-            if (get_mods() == MOD_MASK_GUI)
+            if (MODS_GUI)
             {
                 if (q_tap_count >= 1 && timer_elapsed(q_tap_timer) < DOUBLE_TAP_Q)
                 {
