@@ -18,11 +18,16 @@
 
 // Define custom keycodes & Layers
 enum planck_layers { _QWERTY, _COLEMAK, _DVORAK, _LOWER, _RAISE, _PLOVER, _ADJUST };
-enum custom_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK, PLOVER, BACKLIT, EXT_PLV, DND };
+enum custom_keycodes { PLOVER = SAFE_RANGE, BACKLIT, EXT_PLV, DND };
 
 // Define Momentary Layer keys
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
+
+// Define layout keycodes
+#define QWERTY PDF(_QWERTY)
+#define COLEMAK PDF(_COLEMAK)
+#define DVORAK PDF(_DVORAK)
 
 // Define convenience keycodes
 #define EXPO LCTL(KC_UP)              // macOS Expose
@@ -300,25 +305,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         uprintf("KL: kc: %s, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", get_keycode_string(keycode), record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
     } 
     switch (keycode) {
-        case QWERTY:
-            if (record->event.pressed) {
-                print("mode just switched to qwerty and this is a huge string\n");
-                set_single_persistent_default_layer(_QWERTY);
-            }
-            return false;
-            break;
-        case COLEMAK:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_COLEMAK);
-            }
-            return false;
-            break;
-        case DVORAK:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_DVORAK);
-            }
-            return false;
-            break;
         case BACKLIT:
             if (record->event.pressed) {
                 register_code(KC_RSFT);
