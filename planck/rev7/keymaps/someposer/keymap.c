@@ -17,8 +17,23 @@
 #include QMK_KEYBOARD_H
 
 // Define custom keycodes & Layers
-enum planck_layers { _QWERTY, _COLEMAK, _DVORAK, _LOWER, _RAISE, _PLOVER, _ADJUST };
-enum custom_keycodes { PLOVER = SAFE_RANGE, BACKLIT, EXT_PLV, DND };
+enum planck_layers
+{
+    _QWERTY,
+    _COLEMAK,
+    _DVORAK,
+    _LOWER,
+    _RAISE,
+    _PLOVER,
+    _ADJUST
+};
+enum custom_keycodes
+{
+    PLOVER = SAFE_RANGE,
+    BACKLIT,
+    EXT_PLV,
+    DND
+};
 
 // Define Momentary Layer keys
 #define LOWER MO(_LOWER)
@@ -38,11 +53,13 @@ enum custom_keycodes { PLOVER = SAFE_RANGE, BACKLIT, EXT_PLV, DND };
 #define SCRNPC LCTL(LSFT(LCMD(KC_4))) // macOS Partial Screenshot to Clipboard
 
 // Tap Dance declarations
-enum {
+enum
+{
     TD_MEH_HYPE,
 };
 
-typedef enum {
+typedef enum
+{
     TD_NONE,
     TD_UNKNOWN,
     TD_SINGLE_TAP,
@@ -57,53 +74,71 @@ typedef enum {
 // Tap Dance definitions
 static td_state_t meh_state = TD_NONE;
 
-td_state_t cur_dance(tap_dance_state_t *state) {
-    if (state->count == 1) {
-        if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
+td_state_t cur_dance(tap_dance_state_t *state)
+{
+    if (state->count == 1)
+    {
+        if (state->interrupted || !state->pressed)
+            return TD_SINGLE_TAP;
         // Key has not been interrupted, but the key is still held. Means you want to send a 'HOLD'.
-        else return TD_SINGLE_HOLD;
-    } else if (state->count == 2) {
+        else
+            return TD_SINGLE_HOLD;
+    }
+    else if (state->count == 2)
+    {
         // TD_DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
         // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
         // keystrokes of the key, and not the 'double tap' action/macro.
-        if (state->interrupted) return TD_DOUBLE_SINGLE_TAP;
-        else if (state->pressed) return TD_DOUBLE_HOLD;
-        else return TD_DOUBLE_TAP;
+        if (state->interrupted)
+            return TD_DOUBLE_SINGLE_TAP;
+        else if (state->pressed)
+            return TD_DOUBLE_HOLD;
+        else
+            return TD_DOUBLE_TAP;
     }
 
     // Assumes no one is trying to type the same letter three times (at least not quickly).
     // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
     // an exception here to return a 'TD_TRIPLE_SINGLE_TAP', and define that enum just like 'TD_DOUBLE_SINGLE_TAP'
-    if (state->count == 3) {
-        if (state->interrupted || !state->pressed) return TD_TRIPLE_TAP;
-        else return TD_TRIPLE_HOLD;
-    } else return TD_UNKNOWN;
+    if (state->count == 3)
+    {
+        if (state->interrupted || !state->pressed)
+            return TD_TRIPLE_TAP;
+        else
+            return TD_TRIPLE_HOLD;
+    }
+    else
+        return TD_UNKNOWN;
 }
 
-void meh_finished(tap_dance_state_t *state, void *user_data) {
+void meh_finished(tap_dance_state_t *state, void *user_data)
+{
     meh_state = cur_dance(state);
-    switch (meh_state) {
-        case TD_SINGLE_HOLD: 
-            register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT); 
-            break;
-        case TD_DOUBLE_HOLD:
-            register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
-            break;
-        default:
-            break;
+    switch (meh_state)
+    {
+    case TD_SINGLE_HOLD:
+        register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
+        break;
+    case TD_DOUBLE_HOLD:
+        register_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+        break;
+    default:
+        break;
     }
 }
 
-void meh_reset(tap_dance_state_t *state, void *user_data) {
-    switch (meh_state) {
-        case TD_SINGLE_HOLD: 
-            unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT); 
-            break;
-        case TD_DOUBLE_HOLD:
-            unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
-            break;
-        default:
-            break;
+void meh_reset(tap_dance_state_t *state, void *user_data)
+{
+    switch (meh_state)
+    {
+    case TD_SINGLE_HOLD:
+        unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT);
+        break;
+    case TD_DOUBLE_HOLD:
+        unregister_mods(MOD_BIT_LCTRL | MOD_BIT_LSHIFT | MOD_BIT_LALT | MOD_BIT_LGUI);
+        break;
+    default:
+        break;
     }
     meh_state = TD_NONE;
 }
@@ -123,9 +158,6 @@ tap_dance_action_t tap_dance_actions[] = {
 const key_override_t *key_overrides[] = {
     // &delete_key_override,
 };
-
-
-
 
 /* clang-format off */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -261,131 +293,151 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* clang-format on */
 
 #ifdef AUDIO_ENABLE
-float plover_song[][2]    = SONG(PLOVER_SOUND);
+float plover_song[][2] = SONG(PLOVER_SOUND);
 float plover_gb_song[][2] = SONG(PLOVER_GOODBYE_SOUND);
 float lower_song[][2] = SONG(MINOR_SOUND);
 float raise_song[][2] = SONG(MAJOR_SOUND);
 float adjust_song[][2] = SONG(CHROMATIC_SOUND);
 #endif
 
-layer_state_t layer_state_set_user(layer_state_t state) {
+layer_state_t layer_state_set_user(layer_state_t state)
+{
     layer_state_t current_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 
-    switch (get_highest_layer(current_state)) {
-        case _LOWER:
-// #ifdef AUDIO_ENABLE
-//             stop_all_notes();
-//             PLAY_SONG(lower_song);
-// #endif
-            break;
+    switch (get_highest_layer(current_state))
+    {
+    case _LOWER:
+        // #ifdef AUDIO_ENABLE
+        //             stop_all_notes();
+        //             PLAY_SONG(lower_song);
+        // #endif
+        break;
 
-        case _RAISE:
-// #ifdef AUDIO_ENABLE
-//             stop_all_notes();
-//             PLAY_SONG(raise_song);
-// #endif
-            break;
+    case _RAISE:
+        // #ifdef AUDIO_ENABLE
+        //             stop_all_notes();
+        //             PLAY_SONG(raise_song);
+        // #endif
+        break;
 
-        case _ADJUST:
-// #ifdef AUDIO_ENABLE
-//             stop_all_notes();
-//             PLAY_SONG(adjust_song);
-// #endif
-            break;
+    case _ADJUST:
+        // #ifdef AUDIO_ENABLE
+        //             stop_all_notes();
+        //             PLAY_SONG(adjust_song);
+        // #endif
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     return current_state;
 }
 
 // Variables for Q double-tap
-#define DOUBLE_TAP_Q = 250
+#define DOUBLE_TAP_Q 250
 static uint16_t q_tap_timer = 0;
 static uint8_t q_tap_count = 0;
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (debug_enable) {
-        uprintf("KL: kc: %s, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", get_keycode_string(keycode), record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
-    } 
-    switch (keycode) {
-        case KC_Q:
-            if (record->event.pressed) {
-                if (get_mods() == MOD_MASK_GUI) {
-                    if (q_tap_count >= 1 && timer_elapsed(q_tap_timer) < DOUBLE_TAP_Q) {
-                        // Send CMD+Q on double tap
-                        register_code(KC_LGUI);
-                        register_code(KC_Q);
-                        unregister_code(KC_Q);
-                        unregister_code(KC_LGUI);
+bool process_record_user(uint16_t keycode, keyrecord_t *record)
+{
+    if (debug_enable)
+    {
+        dprintf("KL: kc: %s, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", get_keycode_string(keycode), record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+    }
+    switch (keycode)
+    {
+    case KC_Q:
+        if (record->event.pressed)
+        {
+            if (get_mods() == MOD_MASK_GUI)
+            {
+                if (q_tap_count >= 1 && timer_elapsed(q_tap_timer) < DOUBLE_TAP_Q)
+                {
+                    // Send CMD+Q on double tap
+                    register_code(KC_LGUI);
+                    register_code(KC_Q);
+                    unregister_code(KC_Q);
+                    unregister_code(KC_LGUI);
 
-                        q_tap_count = 0;
-                    } else {
-                        q_tap_timer = timer_read();
-                        q_tap_count = 1;
-                    }
-                    return false;
-                } else {
                     q_tap_count = 0;
                 }
+                else
+                {
+                    q_tap_timer = timer_read();
+                    q_tap_count = 1;
+                }
+                return false;
             }
-        break;
-        case KC_LGUI:
-            if (!record->event.pressed) {
+            else
+            {
                 q_tap_count = 0;
             }
-            break;
-        case BACKLIT:
-            if (record->event.pressed) {
-                register_code(KC_RSFT);
-            } else {
-                unregister_code(KC_RSFT);
-            }
-            return false;
-            break;
-        case PLOVER:
-            if (record->event.pressed) {
+        }
+        break;
+    case KC_LGUI:
+        if (!record->event.pressed)
+        {
+            q_tap_count = 0;
+        }
+        break;
+    case BACKLIT:
+        if (record->event.pressed)
+        {
+            register_code(KC_RSFT);
+        }
+        else
+        {
+            unregister_code(KC_RSFT);
+        }
+        return false;
+        break;
+    case PLOVER:
+        if (record->event.pressed)
+        {
 #ifdef AUDIO_ENABLE
-                stop_all_notes();
-                PLAY_SONG(plover_song);
+            stop_all_notes();
+            PLAY_SONG(plover_song);
 #endif
-                layer_off(_RAISE);
-                layer_off(_LOWER);
-                layer_off(_ADJUST);
-                layer_on(_PLOVER);
-                if (!eeconfig_is_enabled()) {
-                    eeconfig_init();
-                }
-                eeconfig_read_keymap(&keymap_config);
-                keymap_config.nkro = 1;
-                eeconfig_update_keymap(&keymap_config);
+            layer_off(_RAISE);
+            layer_off(_LOWER);
+            layer_off(_ADJUST);
+            layer_on(_PLOVER);
+            if (!eeconfig_is_enabled())
+            {
+                eeconfig_init();
             }
-            return false;
-            break;
-        case EXT_PLV:
-            if (record->event.pressed) {
+            eeconfig_read_keymap(&keymap_config);
+            keymap_config.nkro = 1;
+            eeconfig_update_keymap(&keymap_config);
+        }
+        return false;
+        break;
+    case EXT_PLV:
+        if (record->event.pressed)
+        {
 #ifdef AUDIO_ENABLE
-                PLAY_SONG(plover_gb_song);
+            PLAY_SONG(plover_gb_song);
 #endif
-                layer_off(_PLOVER);
-            }
-            return false;
-            break;
-        case DND:
-            host_system_send(record->event.pressed ? 0x9B : 0);
-            return false;
-            break;
-        case DB_TOGG:
+            layer_off(_PLOVER);
+        }
+        return false;
+        break;
+    case DND:
+        host_system_send(record->event.pressed ? 0x9B : 0);
+        return false;
+        break;
+    case DB_TOGG:
 #ifdef COMMIT_SHA
-            if (!debug_enable && record->event.pressed) {
-                printf("Commit: %s\n", STR(COMMIT_SHA));
-            }
+        if (!debug_enable && record->event.pressed)
+        {
+            printf("Commit: %s\n", STR(COMMIT_SHA));
+        }
 #endif
-            return true;
-            break;
-        default:
-            break;
+        return true;
+        break;
+    default:
+        break;
     }
     return true;
 }
@@ -415,22 +467,27 @@ float melody[8][2][2] = {
 #define ET12_MAJOR_THIRD 1.259921
 #define ET12_PERFECT_FOURTH 1.33484
 #define ET12_TRITONE 1.414214
-#define ET12_PERFECT_FIFTH 1.498307	
+#define ET12_PERFECT_FIFTH 1.498307
 
 deferred_token tokens[8];
 
-uint32_t reset_note(uint32_t trigger_time, void *note) {
-    *(float*)note = 440.0f;
+uint32_t reset_note(uint32_t trigger_time, void *note)
+{
+    *(float *)note = 440.0f;
     return 0;
 }
 
-bool encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise)
+{
     cancel_deferred_exec(tokens[index]);
-    if (clockwise) {
+    if (clockwise)
+    {
         melody[index][1][0] = melody[index][1][0] * ET12_MINOR_SECOND;
         melody[index][0][0] = melody[index][1][0] / ET12_PERFECT_FIFTH;
         audio_play_melody(&melody[index], 2, false);
-    } else {
+    }
+    else
+    {
         melody[index][1][0] = melody[index][1][0] / ET12_MINOR_SECOND;
         melody[index][0][0] = melody[index][1][0] * ET12_TRITONE;
         audio_play_melody(&melody[index], 2, false);
@@ -439,32 +496,40 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     return false;
 }
 
-bool dip_switch_update_user(uint8_t index, bool active) {
-    switch (index) {
-        case 0: {
+bool dip_switch_update_user(uint8_t index, bool active)
+{
+    switch (index)
+    {
+    case 0:
+    {
 #ifdef AUDIO_ENABLE
-            static bool play_sound = false;
+        static bool play_sound = false;
 #endif
-            if (active) {
+        if (active)
+        {
 #ifdef AUDIO_ENABLE
-                if (play_sound) {
-                    PLAY_SONG(plover_song);
-                }
-#endif
-                layer_on(_ADJUST);
-            } else {
-#ifdef AUDIO_ENABLE
-                if (play_sound) {
-                    PLAY_SONG(plover_gb_song);
-                }
-#endif
-                layer_off(_ADJUST);
+            if (play_sound)
+            {
+                PLAY_SONG(plover_song);
             }
-#ifdef AUDIO_ENABLE
-            play_sound = true;
 #endif
-            break;
+            layer_on(_ADJUST);
         }
+        else
+        {
+#ifdef AUDIO_ENABLE
+            if (play_sound)
+            {
+                PLAY_SONG(plover_gb_song);
+            }
+#endif
+            layer_off(_ADJUST);
+        }
+#ifdef AUDIO_ENABLE
+        play_sound = true;
+#endif
+        break;
+    }
     }
     return true;
 }
