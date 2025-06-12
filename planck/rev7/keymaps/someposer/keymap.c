@@ -40,6 +40,7 @@ enum custom_keycodes { PLOVER = SAFE_RANGE, BACKLIT, EXT_PLV, DND };
 // Tap Dance declarations
 enum {
     TD_MEH_HYPE,
+    TD_CMD_Q,
 };
 
 typedef enum {
