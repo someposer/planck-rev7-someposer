@@ -300,11 +300,42 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return current_state;
 }
 
+// Variables for Q double-tap
+#define DOUBLE_TAP_Q = 250
+static uint16_t q_tap_timer = 0;
+static uint8_t q_tap_count = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (debug_enable) {
         uprintf("KL: kc: %s, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", get_keycode_string(keycode), record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
     } 
     switch (keycode) {
+        case KC_Q:
+            if (record->event.pressed) {
+                if (get_mods() == MOD_MASK_GUI) {
+                    if (q_tap_count >= 1 && timer_elapsed(q_tap_timer) < DOUBLE_TAP_Q) {
+                        // Send CMD+Q on double tap
+                        register_code(KC_LGUI);
+                        register_code(KC_Q);
+                        unregister_code(KC_Q);
+                        unregister_code(KC_LGUI);
+
+                        q_tap_count = 0;
+                    } else {
+                        q_tap_timer = timer_read();
+                        q_tap_count = 1;
+                    }
+                    return false;
+                } else {
+                    q_tap_count = 0;
+                }
+            }
+        break;
+        case KC_LGUI:
+            if (!record->event.pressed) {
+                q_tap_count = 0;
+            }
+            break;
         case BACKLIT:
             if (record->event.pressed) {
                 register_code(KC_RSFT);
