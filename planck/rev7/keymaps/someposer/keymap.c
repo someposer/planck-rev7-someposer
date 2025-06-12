@@ -122,7 +122,9 @@ void q_dance_finished(tap_dance_state_t *state, void *user_data) {
 }
 
 void q_dance_reset(tap_dance_state_t *state, void *user_data) {
-    unregister_code(KC_Q);
+    if (get_mods() != MOD_MASK_GUI) {
+        unregister_code(KC_Q);
+    }
 }
 
 tap_dance_action_t tap_dance_actions[] = {
